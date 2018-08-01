@@ -4,6 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GradeBookApplication.GradeBooks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using GradeBookApplication.Enums;
 
 namespace GradeBookApplication.GradeBooks
 {
@@ -63,6 +67,128 @@ namespace GradeBookApplication.GradeBooks
                     return ConvertToGradeBook(json);
                 }
             }
+        }
+
+        public void Save()
+        {
+            using (var file = new FileStream(Name + ".gdbk", FileMode.Create, FileAccess.Write))
+            {
+                using (var writer = new StreamWriter(file))
+                {
+                    var json = JsonConvert.SerializeObject(this);
+                    writer.Write(json);
+                }
+            }
+        }
+
+        public virtual double GetGPA(char letterGrade, StudentType studentType)
+        {
+            switch (letterGrade)
+            {
+                case 'A':
+                    return 4;
+                case 'B':
+                    return 3;
+                case 'C':
+                    return 2;
+                case 'D':
+                    return 1;
+            }
+            return 0;
+        }
+
+        public virtual void CalculateStatistics()
+        {
+            var allStudentsPoints = 0d;
+            var campusPoints = 0d;
+            var statePoints = 0d;
+            var nationalPoints = 0d;
+            var internationPoints = 0d;
+            var standardPoints = 0d;
+            var honourPoints = 0d;
+            var dualEnrollmentPoints = 0d;
+
+            foreach (var student in Students)
+            {
+                student.LetterGrade = GetLetterGrade(student.AverageGrade);
+                student.GPA = GetGPA(student.LetterGrade, student.Type);
+
+                Console.WriteLine("{0} ({1}:{2}) GPA {3}.", student.Name, student.LetterGrade, student.AverageGrade, student.GPA);
+                allStudentsPoints += student.AverageGrade;
+
+                switch (student.Enrollment)
+                {
+                    case EnrollmentType.Campus:
+                        campusPoints += student.AverageGrade;
+                        break;
+                    case EnrollmentType.State:
+                        statePoints += student.AverageGrade;
+                        break;
+                    case EnrollmentType.National:
+                        nationalpoints += student.AverageGrade;
+                        break;
+                    case EnrollmentType.International:
+                        internationPoints += student.AverageGrade;
+                        break;
+                }
+
+                switch (student.Type)
+                {
+                    case StudentType.Standard:
+                        standardPoints += student.AverageGrade;
+                        break;
+                    case StudentType.Honours:
+                        honourPoints += student.AverageGrade;
+                        break;
+                    case StudentType.DualEnrolled:
+                        dualEnrollmentPoints += student.AverageGrade;
+                        break;
+                }
+
+                Console.WriteLine("Average grade for all students is:" + (allStudentsPoints / Students.Count));
+                if (campusPoints != 0)
+                    Console.WriteLine("Average for only local students is: " + (campusPoints / Students.Where(e => e.Enrollment == EnrollmentType.Campus).Count()));
+                if (statePoints != 0)
+                    Console.WriteLine("Average for only state students (excluding local) is " + (statePoints / Students.Where(e => e.Enrollment == EnrollmentType.State).Count()));
+                if (nationalPoints != 0)
+                    Console.WriteLine("Average for only national students (excluding local and state) is " + (nationalPoints / Students.Where(e => e.Enrollment == EnrollmentType.National).Count()));
+                if (internationPoints != 0)
+                    Console.WriteLine("Average for only international students is " + (internationPoints / Students.Where(e => e.Enrollment == EnrollmentType.International).Count()));
+                if (standardPoints != 0)
+                    Console.WriteLine("Average for students excluding honours and dual enrollment is " + (standardPoints / Students.Where(e => e.Type == StudentType.Standard).Count()));
+                if (honourPoints != 0)
+                    Console.WriteLine("Average for only honour students is " + (honourPoints / Students.Where(e => e.Type == StudentType.Honours).Count()));
+                if (dualEnrollmentPoints != 0)
+                    Console.WriteLine("Average for only dual enrollment students is " + (dualEnrollmentPoints / Students.Where(e => e.Type == StudentType.DualEnrolled).Count()));
+            }
+        }
+
+        public virtual char CalculateStudentStatistics(string name)
+        {
+            var student = Students.FirstOrDefault(e => e.Name == name);
+            student.LetterGrade = GetLetterGrade(student.AverageGrade);
+            student.GPA = GetGPA(student.LetterGrade, student.Type);
+
+            Console.WriteLine("{0} ({1}:{2}) GPA: {3}.", student.Name, student.LetterGrade, student.AverageGrade, student.GPA);
+        }
+
+        public virtual char GetLetterGrade(double averageGrade)
+        {
+            if (averageGrade >= 90)
+                return 'A';
+            else if (averageGrade >= 80)
+                return 'B';
+            else if (averageGrade >= 70)
+                return 'C';
+            else if (averageGrade >= 60)
+                return 'D';
+            else
+                return 'F';
+        }
+
+        public static dynamic ConvertToGradeBook(string json)
+        {
+            var gradeBookEnum = (from assembly );
         }
     }
 }

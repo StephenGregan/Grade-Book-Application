@@ -212,9 +212,6 @@ namespace GradeBookApplication.UserInterfaces
             Console.WriteLine("Close - closes the gradeBook and takes you back to the starting command options.");
             Console.WriteLine();
             Console.WriteLine("Save - saves the gradeBook to the hard drive for later use.");
-
         }
-
-
     }
 }

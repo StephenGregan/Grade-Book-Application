@@ -14,8 +14,9 @@ namespace GradeBookApplication.UserInterfaces
         {
             while (!Quit)
             {
-                Console.WriteLine("What wouldm you like to do?");
+                Console.WriteLine("What would you like to do?\n");
                 var command = Console.ReadLine().ToLower();
+                Console.WriteLine();
                 CommandRoute(command);
             }
         }
@@ -54,7 +55,7 @@ namespace GradeBookApplication.UserInterfaces
             }
             var name = parts[1];
             BaseGradeBook gradebook = new BaseGradeBook(name);
-            Console.WriteLine("Created greadeBook {0}.", name);
+            Console.WriteLine("Created gradeBook {0}.", name);
             GradeBookUserInterface.CommandLoop(gradebook);
         }
 
@@ -86,7 +87,7 @@ namespace GradeBookApplication.UserInterfaces
             Console.WriteLine();
             Console.WriteLine("Help - Displays all excepted commands.");
             Console.WriteLine();
-            Console.WriteLine("Quit - Exists the application");
+            Console.WriteLine("Quit - Exists the application\n");
         }
     }
 }

@@ -30,10 +30,36 @@ namespace GradeBookApplication.GradeBooks
             
         }
 
-        public void RemoveStudent(string name, double score)
+        public void RemoveStudent(string name)
         {
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentException("A name is required to remove a student from a gradeBook.");
+            var student = Students.FirstOrDefault(e => e.Name == name);
+            if (student == null)
+            {
+                Console.WriteLine("student {0} was not found, please try again.", name);
+                return;
+            }
+            Students.Remove(student);
+        }
+
+        public void AddGrade(string name, double score)
+        {
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentException("A name is required to add a grade to a student.");
+            var student = Students.FirstOrDefault(e => e.Name == name);
+            if (student == null)
+            {
+                Console.WriteLine("student {0} was not found, please try again.", name);
+                return;
+            }
+            student.AddGrade(score);
+        }
+
+        public void RemoveGrade(string name, double score)
+        {
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentException("A name is required to remove a grade from a student.");
             var student = Students.FirstOrDefault(e => e.Name == name);
             if (student == null)
             {

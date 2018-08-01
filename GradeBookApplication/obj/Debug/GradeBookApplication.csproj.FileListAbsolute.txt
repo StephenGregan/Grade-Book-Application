@@ -1,0 +1,10 @@
+C:\Users\Ronan\source\repos\GradeBookApplication\GradeBookApplication\obj\Debug\GradeBookApplication.csprojResolveAssemblyReference.cache
+C:\Users\Ronan\source\repos\GradeBookApplication\GradeBookApplication\obj\Debug\GradeBookApplication.csproj.CoreCompileInputs.cache
+C:\Users\Ronan\source\repos\GradeBookApplication\GradeBookApplication\bin\Debug\GradeBookApplication.exe.config
+C:\Users\Ronan\source\repos\GradeBookApplication\GradeBookApplication\bin\Debug\GradeBookApplication.exe
+C:\Users\Ronan\source\repos\GradeBookApplication\GradeBookApplication\bin\Debug\GradeBookApplication.pdb
+C:\Users\Ronan\source\repos\GradeBookApplication\GradeBookApplication\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Ronan\source\repos\GradeBookApplication\GradeBookApplication\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Ronan\source\repos\GradeBookApplication\GradeBookApplication\obj\Debug\GradeBookApplication.csproj.CopyComplete
+C:\Users\Ronan\source\repos\GradeBookApplication\GradeBookApplication\obj\Debug\GradeBookApplication.exe
+C:\Users\Ronan\source\repos\GradeBookApplication\GradeBookApplication\obj\Debug\GradeBookApplication.pdb

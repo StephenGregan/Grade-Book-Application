@@ -14,6 +14,7 @@ namespace GradeBookApplication
         public StudentType Type { get; set; }
         public EnrollmentType Enrollment { get; set; }
         public List<double> Grades { get; set; }
+
         [JsonIgnore]
         public double AverageGrade
         {
@@ -38,10 +39,9 @@ namespace GradeBookApplication
         public void AddGrade(double grade)
         {
             if (grade < 0 || grade > 100)
-            {
                 throw new ArgumentException("Grades must be between 0 and 100.");
                 Grades.Add(grade);
-            }
+            
         }
 
         public void RemoveGrade(double grade)

@@ -125,7 +125,7 @@ namespace GradeBookApplication.GradeBooks
                         statePoints += student.AverageGrade;
                         break;
                     case EnrollmentType.National:
-                        nationalpoints += student.AverageGrade;
+                        nationalPoints += student.AverageGrade;
                         break;
                     case EnrollmentType.International:
                         internationPoints += student.AverageGrade;
@@ -163,13 +163,19 @@ namespace GradeBookApplication.GradeBooks
             }
         }
 
-        public virtual char CalculateStudentStatistics(string name)
+        public virtual void CalculateStudentStatistics(string name)
         {
             var student = Students.FirstOrDefault(e => e.Name == name);
             student.LetterGrade = GetLetterGrade(student.AverageGrade);
             student.GPA = GetGPA(student.LetterGrade, student.Type);
 
             Console.WriteLine("{0} ({1}:{2}) GPA: {3}.", student.Name, student.LetterGrade, student.AverageGrade, student.GPA);
+            Console.WriteLine();
+            Console.WriteLine("Grades:");
+            foreach (var grade in student.Grades)
+            {
+                Console.WriteLine(grade);
+            }
         }
 
         public virtual char GetLetterGrade(double averageGrade)
@@ -188,7 +194,39 @@ namespace GradeBookApplication.GradeBooks
 
         public static dynamic ConvertToGradeBook(string json)
         {
-            var gradeBookEnum = (from assembly );
+            var gradeBookEnum = (from assembly in AppDomain.CurrentDomain.GetAssemblies()
+                                from type in assembly.GetTypes()
+                                where type.FullName == "GradeBook.Enums.GradeBookType"
+                                select type).FirstOrDefault();
+
+            var jObject = JsonConvert.DeserializeObject<JObject>(json);
+            var gradeBookType = jObject.Property("Type")?.Value?.ToString();
+
+            if ((from assembly in AppDomain.CurrentDomain.GetAssemblies()
+                 from type in assembly.GetTypes()
+                 where type.FullName == "GradeBook.GradeBooks.StandardGradeBook"
+                 select type).FirstOrDefault() == null)
+                gradeBookType = "Base";
+            else
+            {
+                if (string.IsNullOrEmpty(gradeBookType))
+                    gradeBookType = "Standard";
+                else
+                    gradeBookType = Enum.GetName(gradeBookEnum, int.Parse(gradeBookType));
+            }
+
+            var gradeBook = (from assembly in AppDomain.CurrentDomain.GetAssemblies()
+                             from type in assembly.GetTypes()
+                             where type.FullName == "GradeBook.GradeBooks." + gradeBookType + "GradeBook"
+                             select type).FirstOrDefault();
+
+            if (gradeBook == null)
+                gradeBook = (from assembly in AppDomain.CurrentDomain.GetAssemblies()
+                             from type in assembly.GetTypes()
+                             where type.FullName == "GradeBook.GradeBooks.StandardGradeBook"
+                             select type).FirstOrDefault();
+
+            return JsonConvert.DeserializeObject(json, gradeBook);
         }
     }
 }
